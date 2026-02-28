@@ -34,6 +34,8 @@
             --border: #2a2a2a;
             --success: #22c55e;
             --danger: #ef4444;
+            --allay-blue: #00d4ff;
+            --allay-light: #80e5ff;
         }
 
         body {
@@ -45,108 +47,83 @@
             overflow-x: hidden;
         }
 
-        /* Login Screen */
-        .login-screen {
+        /* Ambient Lighting Effects */
+        .ambient-light {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            transition: opacity 0.5s ease, visibility 0.5s;
-        }
-
-        .login-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
             pointer-events: none;
+            z-index: 0;
+            animation: pulse-light 4s ease-in-out infinite;
         }
 
-        .login-box {
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        .light-1 { top: 10%; left: 10%; animation-delay: 0s; }
+        .light-2 { top: 60%; right: 10%; animation-delay: 1.3s; background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%); }
+        .light-3 { bottom: 10%; left: 40%; animation-delay: 2.6s; background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%); }
+
+        @keyframes pulse-light {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
         }
 
-        .login-logo {
-            font-size: 2.5rem;
-            font-weight: 800;
-            letter-spacing: 6px;
-            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-light) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
+        /* Allay Companion Styles */
+        .allay {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            z-index: 9999;
+            pointer-events: none;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
         }
 
-        .login-subtitle {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .login-input {
+        .allay-body {
             width: 100%;
-            padding: 1rem 1.5rem;
-            background: rgba(26, 26, 26, 0.8);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 1rem;
-            margin-bottom: 1rem;
-            transition: all 0.3s;
-            text-align: center;
-            letter-spacing: 2px;
+            height: 100%;
+            animation: float-allay 3s ease-in-out infinite;
         }
 
-        .login-input:focus {
-            outline: none;
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        @keyframes float-allay {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-5px) rotate(2deg); }
+            75% { transform: translateY(5px) rotate(-2deg); }
         }
 
-        .login-btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, var(--accent-gold) 0%, #b8941f 100%);
-            border: none;
-            border-radius: 12px;
-            color: #000;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        .allay-wings {
+            animation: flutter 0.2s linear infinite;
+            transform-origin: center;
         }
 
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        @keyframes flutter {
+            0%, 100% { transform: scaleX(1); }
+            50% { transform: scaleX(0.6); }
         }
 
-        .login-error {
-            color: var(--danger);
-            font-size: 0.85rem;
-            margin-top: 1rem;
+        .allay-glow {
+            animation: glow-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { filter: drop-shadow(0 0 5px var(--allay-blue)); }
+            50% { filter: drop-shadow(0 0 15px var(--allay-light)); }
+        }
+
+        /* Music Notes from Allay */
+        .music-note {
+            position: fixed;
+            font-size: 16px;
+            color: var(--allay-light);
+            pointer-events: none;
+            z-index: 9998;
+            animation: float-note 3s ease-out forwards;
             opacity: 0;
-            transition: opacity 0.3s;
         }
 
-        .login-error.show {
-            opacity: 1;
+        @keyframes float-note {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-50px) rotate(20deg); opacity: 0; }
         }
 
         /* Constellation Background Canvas */
@@ -199,6 +176,7 @@
             display: flex;
             align-items: center;
             gap: 1rem;
+            position: relative;
         }
 
         .logo {
@@ -362,43 +340,6 @@
             font-weight: 600;
         }
 
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            background: rgba(212, 175, 55, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .stat-info {
-            flex: 1;
-        }
-
-        .stat-number {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .stat-desc {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
         .login-log {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -418,27 +359,6 @@
 
         .log-entry:last-child {
             border-bottom: none;
-        }
-
-        .log-time {
-            color: var(--accent-gold);
-            font-weight: 600;
-        }
-
-        .log-device {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-        }
-
-        .password-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .password-input-group {
-            display: flex;
-            gap: 0.5rem;
         }
 
         /* Main Container */
@@ -1417,10 +1337,6 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .login-box {
-                padding: 2rem;
-            }
-
             .header-content {
                 flex-direction: column;
                 text-align: center;
@@ -1453,33 +1369,28 @@
                 padding: 0.25rem 0.5rem;
             }
 
-            .settings-content {
-                max-height: 90vh;
+            .allay {
+                width: 30px;
+                height: 30px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Login Screen -->
-    <div id="loginScreen" class="login-screen">
-        <div class="login-box">
-            <div class="login-logo">AURA</div>
-            <div class="login-subtitle">Private Inventory</div>
-            <input type="password" id="passwordInput" class="login-input" placeholder="ENTER PASSWORD" maxlength="20">
-            <button class="login-btn" onclick="checkPassword()">UNLOCK VAULT</button>
-            <div id="loginError" class="login-error">Invalid password</div>
-        </div>
-    </div>
+    <!-- Ambient Lighting -->
+    <div class="ambient-light light-1"></div>
+    <div class="ambient-light light-2"></div>
+    <div class="ambient-light light-3"></div>
 
     <!-- Constellation Background -->
     <canvas id="constellation-canvas"></canvas>
 
-    <!-- Main App (Hidden until login) -->
-    <div id="mainApp" style="display: none;">
+    <!-- Main App -->
+    <div id="mainApp">
         <!-- Header -->
         <header class="header">
             <div class="header-content">
-                <div class="logo-section">
+                <div class="logo-section" id="logoSection">
                     <div>
                         <div class="logo">AURA</div>
                         <div class="subtitle">Private Inventory System</div>
@@ -1545,57 +1456,9 @@
                 <button class="modal-close" onclick="closeSettings()">&times;</button>
             </div>
             <div class="settings-body">
-                <!-- Access Stats -->
-                <div class="settings-section">
-                    <div class="settings-section-title">Access Statistics</div>
-                    <div class="stat-card">
-                        <div class="stat-icon">👁️</div>
-                        <div class="stat-info">
-                            <div class="stat-number" id="visitCount">0</div>
-                            <div class="stat-desc">Total page visits</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">🔓</div>
-                        <div class="stat-info">
-                            <div class="stat-number" id="loginCount">0</div>
-                            <div class="stat-desc">Successful logins</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">🕐</div>
-                        <div class="stat-info">
-                            <div class="stat-number" id="lastLogin">Never</div>
-                            <div class="stat-desc">Last successful login</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Login History -->
-                <div class="settings-section">
-                    <div class="settings-section-title">Recent Login History (Last 10)</div>
-                    <div class="login-log" id="loginLog">
-                        <div class="log-entry">
-                            <span style="color: var(--text-muted);">No login history yet</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Change Password -->
-                <div class="settings-section">
-                    <div class="settings-section-title">Security</div>
-                    <div class="password-form">
-                        <input type="password" class="form-input" id="currentPassword" placeholder="Current password">
-                        <input type="password" class="form-input" id="newPassword" placeholder="New password">
-                        <div class="password-input-group">
-                            <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm new password" style="flex: 1;">
-                            <button class="btn btn-primary" onclick="changePassword()">Update</button>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Clear Data -->
-                <div class="settings-section" style="border-top: 1px solid var(--border); padding-top: 1.5rem; margin-top: 2rem;">
+                <div class="settings-section">
+                    <div class="settings-section-title">Danger Zone</div>
                     <button class="btn btn-danger" onclick="clearAllData()" style="width: 100%;">
                         🗑️ Clear All Data
                     </button>
@@ -1691,75 +1554,131 @@
     <div id="toast" class="toast"></div>
 
     <script>
-        // Password Management
-        let currentPassword = localStorage.getItem('aura_password') || 'okxd';
-        
-        // Access Logging
-        function logAccess(type) {
-            const logs = JSON.parse(localStorage.getItem('aura_logs') || '[]');
-            const deviceInfo = {
-                time: new Date().toISOString(),
-                type: type, // 'visit' or 'login'
-                userAgent: navigator.userAgent,
-                platform: navigator.platform,
-                language: navigator.language,
-                screen: `${window.screen.width}x${window.screen.height}`
-            };
-            
-            logs.unshift(deviceInfo);
-            // Keep only last 50 entries
-            if (logs.length > 50) logs.pop();
-            
-            localStorage.setItem('aura_logs', JSON.stringify(logs));
-            
-            // Update stats
-            if (type === 'visit') {
-                const visits = parseInt(localStorage.getItem('aura_visits') || '0') + 1;
-                localStorage.setItem('aura_visits', visits.toString());
-            } else if (type === 'login') {
-                const logins = parseInt(localStorage.getItem('aura_logins') || '0') + 1;
-                localStorage.setItem('aura_logins', logins.toString());
-                localStorage.setItem('aura_last_login', new Date().toISOString());
+        // Create Allay Companions
+        function createAllays() {
+            const allaySVG = `
+                <svg class="allay-body allay-glow" viewBox="0 0 100 100" fill="none">
+                    <!-- Wings -->
+                    <g class="allay-wings">
+                        <path d="M20 50 Q5 30 15 15 Q25 5 35 20 Q30 35 20 50" fill="#80e5ff" opacity="0.8"/>
+                        <path d="M80 50 Q95 30 85 15 Q75 5 65 20 Q70 35 80 50" fill="#80e5ff" opacity="0.8"/>
+                    </g>
+                    <!-- Body -->
+                    <rect x="30" y="25" width="40" height="50" rx="20" fill="#00d4ff"/>
+                    <!-- Face -->
+                    <ellipse cx="40" cy="45" rx="5" ry="8" fill="white"/>
+                    <ellipse cx="60" cy="45" rx="5" ry="8" fill="white"/>
+                    <!-- Smile -->
+                    <path d="M42 60 Q50 68 58 60" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <!-- Arms -->
+                    <ellipse cx="25" cy="55" rx="8" ry="15" fill="#00d4ff" transform="rotate(-20 25 55)"/>
+                    <ellipse cx="75" cy="55" rx="8" ry="15" fill="#00d4ff" transform="rotate(20 75 55)"/>
+                </svg>
+            `;
+
+            // Create 3 Allays with different behaviors
+            for (let i = 0; i < 3; i++) {
+                const allay = document.createElement('div');
+                allay.className = 'allay';
+                allay.id = `allay-${i}`;
+                allay.innerHTML = allaySVG;
+                allay.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+                allay.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+                document.body.appendChild(allay);
+                
+                // Different behavior for each Allay
+                animateAllay(allay, i);
             }
         }
 
-        // Log this visit
-        logAccess('visit');
-
-        function checkPassword() {
-            const input = document.getElementById('passwordInput').value;
-            if (input === currentPassword) {
-                logAccess('login');
-                document.getElementById('loginScreen').classList.add('hidden');
-                document.getElementById('mainApp').style.display = 'block';
-                sessionStorage.setItem('aura_authenticated', 'true');
-                initConstellation();
-            } else {
-                document.getElementById('loginError').classList.add('show');
-                setTimeout(() => {
-                    document.getElementById('loginError').classList.remove('show');
-                }, 2000);
-            }
+        function animateAllay(allay, index) {
+            let x = parseFloat(allay.style.left);
+            let y = parseFloat(allay.style.top);
+            let targetX = x;
+            let targetY = y;
+            let speed = 0.5 + (index * 0.3);
+            let mode = 'wander'; // 'wander', 'follow', 'dance'
+            
+            setInterval(() => {
+                const logo = document.getElementById('logoSection');
+                const logoRect = logo ? logo.getBoundingClientRect() : null;
+                
+                // Randomly change behavior
+                if (Math.random() < 0.01) {
+                    const modes = ['wander', 'follow', 'dance'];
+                    mode = modes[Math.floor(Math.random() * modes.length)];
+                }
+                
+                if (mode === 'dance' && logoRect) {
+                    // Dance around logo
+                    const angle = Date.now() / 1000 + (index * 2);
+                    targetX = logoRect.left + logoRect.width/2 + Math.cos(angle) * 100 - 20;
+                    targetY = logoRect.top + Math.sin(angle) * 60 - 20;
+                } else if (mode === 'follow') {
+                    // Follow mouse loosely
+                    targetX = mouseX + (index * 30) - 50;
+                    targetY = mouseY + (index * 20) - 50;
+                } else {
+                    // Wander randomly
+                    if (Math.random() < 0.02 || Math.abs(x - targetX) < 10) {
+                        targetX = Math.random() * (window.innerWidth - 50);
+                        targetY = Math.random() * (window.innerHeight - 50);
+                    }
+                }
+                
+                // Smooth movement
+                x += (targetX - x) * 0.02 * speed;
+                y += (targetY - y) * 0.02 * speed;
+                
+                // Keep in bounds
+                x = Math.max(0, Math.min(window.innerWidth - 50, x));
+                y = Math.max(0, Math.min(window.innerHeight - 50, y));
+                
+                allay.style.left = x + 'px';
+                allay.style.top = y + 'px';
+                
+                // Face direction
+                const facing = targetX > x ? 1 : -1;
+                allay.style.transform = `scaleX(${facing})`;
+                
+            }, 50);
+            
+            // Spawn music notes occasionally
+            setInterval(() => {
+                if (Math.random() < 0.3) {
+                    spawnMusicNote(x + 20, y);
+                }
+            }, 2000 + (index * 500));
         }
 
-        // Check if already authenticated this session
-        if (sessionStorage.getItem('aura_authenticated') === 'true') {
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('mainApp').style.display = 'block';
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function spawnMusicNote(x, y) {
+            const notes = ['♪', '♫', '♬', '♩'];
+            const note = document.createElement('div');
+            note.className = 'music-note';
+            note.textContent = notes[Math.floor(Math.random() * notes.length)];
+            note.style.left = x + 'px';
+            note.style.top = y + 'px';
+            document.body.appendChild(note);
+            
+            setTimeout(() => note.remove(), 3000);
         }
 
-        // Enter key on password
-        document.getElementById('passwordInput')?.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') checkPassword();
+        // Initialize Allays when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            createAllays();
         });
 
         // Constellation Background Animation
-        let constellationInitialized = false;
         function initConstellation() {
-            if (constellationInitialized) return;
-            constellationInitialized = true;
-            
-            var width, height, canvas, ctx, points, target, animateHeader = true;
+            var width, height, canvas, ctx, points, target;
             var pointCount = 60;
             var connectionDistance = 150;
             var mouseDistance = 250;
@@ -1773,7 +1692,6 @@
                 canvas.width = width;
                 canvas.height = height;
 
-                // Create points
                 points = [];
                 for (var i = 0; i < pointCount; i++) {
                     var x = Math.random() * width;
@@ -1812,33 +1730,27 @@
                 for (var i = 0; i < points.length; i++) {
                     var p = points[i];
 
-                    // Move point
                     p.x += p.vx;
                     p.y += p.vy;
 
-                    // Bounce off edges
                     if (p.x < 0 || p.x > width) p.vx *= -1;
                     if (p.y < 0 || p.y > height) p.vy *= -1;
 
-                    // Calculate distance to mouse
                     var dx = target.x - p.x;
                     var dy = target.y - p.y;
                     var dist = Math.sqrt(dx * dx + dy * dy);
 
-                    // Activate based on mouse proximity
                     if (dist < mouseDistance) {
                         p.active = 1 - (dist / mouseDistance);
                     } else {
                         p.active *= 0.95;
                     }
 
-                    // Draw point
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, 2 + p.active * 2, 0, Math.PI * 2);
                     ctx.fillStyle = 'rgba(212, 175, 55, ' + (0.3 + p.active * 0.7) + ')';
                     ctx.fill();
 
-                    // Draw connections
                     for (var j = i + 1; j < points.length; j++) {
                         var p2 = points[j];
                         var dx2 = p2.x - p.x;
@@ -1856,7 +1768,6 @@
                         }
                     }
 
-                    // Connect to mouse if close
                     if (dist < mouseDistance) {
                         ctx.beginPath();
                         ctx.moveTo(p.x, p.y);
@@ -1873,95 +1784,8 @@
             init();
         }
 
-        // Settings Functions
-        function openSettings() {
-            updateSettingsStats();
-            document.getElementById('settingsModal').classList.add('active');
-        }
-
-        function closeSettings(event) {
-            if (event && event.target !== event.currentTarget) return;
-            document.getElementById('settingsModal').classList.remove('active');
-        }
-
-        function updateSettingsStats() {
-            // Update counts
-            document.getElementById('visitCount').textContent = localStorage.getItem('aura_visits') || '0';
-            document.getElementById('loginCount').textContent = localStorage.getItem('aura_logins') || '0';
-            
-            // Last login
-            const lastLogin = localStorage.getItem('aura_last_login');
-            if (lastLogin) {
-                const date = new Date(lastLogin);
-                document.getElementById('lastLogin').textContent = date.toLocaleString();
-            } else {
-                document.getElementById('lastLogin').textContent = 'Never';
-            }
-            
-            // Login history
-            const logs = JSON.parse(localStorage.getItem('aura_logs') || '[]');
-            const loginLogs = logs.filter(log => log.type === 'login').slice(0, 10);
-            
-            const logContainer = document.getElementById('loginLog');
-            if (loginLogs.length === 0) {
-                logContainer.innerHTML = '<div class="log-entry"><span style="color: var(--text-muted);">No login history yet</span></div>';
-            } else {
-                logContainer.innerHTML = loginLogs.map(log => {
-                    const date = new Date(log.time);
-                    const device = log.platform || 'Unknown';
-                    return `
-                        <div class="log-entry">
-                            <div>
-                                <div class="log-time">${date.toLocaleString()}</div>
-                                <div class="log-device">${device} • ${log.screen}</div>
-                            </div>
-                            <span style="color: var(--success); font-size: 0.75rem;">✓ Success</span>
-                        </div>
-                    `;
-                }).join('');
-            }
-        }
-
-        function changePassword() {
-            const current = document.getElementById('currentPassword').value;
-            const newPass = document.getElementById('newPassword').value;
-            const confirm = document.getElementById('confirmPassword').value;
-            
-            if (current !== currentPassword) {
-                showToast('Current password is incorrect', 'error');
-                return;
-            }
-            
-            if (newPass.length < 4) {
-                showToast('Password must be at least 4 characters', 'error');
-                return;
-            }
-            
-            if (newPass !== confirm) {
-                showToast('New passwords do not match', 'error');
-                return;
-            }
-            
-            currentPassword = newPass;
-            localStorage.setItem('aura_password', newPass);
-            
-            // Clear inputs
-            document.getElementById('currentPassword').value = '';
-            document.getElementById('newPassword').value = '';
-            document.getElementById('confirmPassword').value = '';
-            
-            showToast('Password updated successfully', 'success');
-        }
-
-        function clearAllData() {
-            if (confirm('⚠️ WARNING: This will delete ALL your inventory data, logs, and settings. This cannot be undone. Are you sure?')) {
-                localStorage.clear();
-                showToast('All data cleared. Reloading...', 'success');
-                setTimeout(() => {
-                    location.reload();
-                }, 2000);
-            }
-        }
+        // Initialize constellation
+        initConstellation();
 
         // Data Management
         let inventory = [];
@@ -2021,6 +1845,26 @@
             input.value = val;
         }
 
+        // Settings Functions
+        function openSettings() {
+            document.getElementById('settingsModal').classList.add('active');
+        }
+
+        function closeSettings(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ WARNING: This will delete ALL your inventory data. This cannot be undone. Are you sure?')) {
+                localStorage.clear();
+                showToast('All data cleared. Reloading...', 'success');
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            }
+        }
+
         // Modal Functions
         function openModal(itemId = null) {
             const modal = document.getElementById('itemModal');
@@ -2031,11 +1875,9 @@
             currentMainImage = null;
             currentQCImages = [null, null, null, null, null, null];
             
-            // Reset main image
             document.getElementById('imageUpload').classList.remove('has-image');
             document.getElementById('imagePreview').src = '';
             
-            // Reset QC grid
             initQCGrid();
             
             if (itemId) {
@@ -2049,14 +1891,12 @@
                     document.getElementById('itemQC').value = item.qcNotes || '';
                     document.getElementById('itemLink').value = item.link || '';
                     
-                    // Load main image
                     if (item.image) {
                         currentMainImage = item.image;
                         document.getElementById('imagePreview').src = item.image;
                         document.getElementById('imageUpload').classList.add('has-image');
                     }
                     
-                    // Load QC images
                     if (item.qcImages) {
                         item.qcImages.forEach((img, idx) => {
                             if (img) {
@@ -2139,7 +1979,6 @@
                 return;
             }
 
-            // Filter out null QC images
             const validQCImages = currentQCImages.filter(img => img !== null);
 
             const itemData = {
@@ -2191,7 +2030,6 @@
             renderInventory();
             updateStats();
             
-            // Visual feedback
             showToast(`Stock updated: ${item.stock}`, 'success');
         }
 
@@ -2243,7 +2081,6 @@
                             </div>`
                         }
                         
-                        <!-- Stock Badge with Quick Controls -->
                         <div class="stock-badge">
                             <div>
                                 <div class="stock-badge-label">Stock</div>
@@ -2325,12 +2162,10 @@
 
             lightboxImages = [];
             
-            // Add main image if exists
             if (item.image) {
                 lightboxImages.push({ src: item.image, type: 'main' });
             }
             
-            // Add QC images
             if (item.qcImages) {
                 item.qcImages.forEach(img => {
                     lightboxImages.push({ src: img, type: 'qc' });
@@ -2339,9 +2174,8 @@
 
             if (lightboxImages.length === 0) return;
 
-            // Determine starting index
             if (qcIndex === -1) {
-                currentLightboxIndex = 0; // Main image
+                currentLightboxIndex = 0;
             } else {
                 currentLightboxIndex = item.image ? qcIndex + 1 : qcIndex;
             }
@@ -2358,7 +2192,6 @@
             img.src = lightboxImages[currentLightboxIndex].src;
             counter.textContent = `${currentLightboxIndex + 1} / ${lightboxImages.length}`;
             
-            // Update nav buttons visibility
             const prev = document.querySelector('.lightbox-prev');
             const next = document.querySelector('.lightbox-next');
             prev.style.display = lightboxImages.length > 1 ? 'flex' : 'none';
