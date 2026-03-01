@@ -3,17 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0a0a0a">
     <title>AURA | Private Inventory</title>
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiQVVSQSBJbnZlbnRvcnkiLCJzaG9ydF9uYW1lIjoiQVVSQSIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMGEwYTBhIiwidGhlbWVfY29sb3IiOiIjZDRhZjM3In0=">
-    
-    <!-- iOS PWA Support -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="AURA">
-    
     <style>
         * {
             margin: 0;
@@ -34,8 +24,7 @@
             --border: #2a2a2a;
             --success: #22c55e;
             --danger: #ef4444;
-            --allay-blue: #00d4ff;
-            --allay-light: #80e5ff;
+            --stock-bg: rgba(212, 175, 55, 0.1);
         }
 
         body {
@@ -45,85 +34,6 @@
             line-height: 1.6;
             min-height: 100vh;
             overflow-x: hidden;
-        }
-
-        /* Ambient Lighting Effects */
-        .ambient-light {
-            position: fixed;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-            animation: pulse-light 4s ease-in-out infinite;
-        }
-
-        .light-1 { top: 10%; left: 10%; animation-delay: 0s; }
-        .light-2 { top: 60%; right: 10%; animation-delay: 1.3s; background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%); }
-        .light-3 { bottom: 10%; left: 40%; animation-delay: 2.6s; background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%); }
-
-        @keyframes pulse-light {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 0.8; }
-        }
-
-        /* Allay Companion Styles */
-        .allay {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            z-index: 9999;
-            pointer-events: none;
-            transition: transform 0.3s ease;
-            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
-        }
-
-        .allay-body {
-            width: 100%;
-            height: 100%;
-            animation: float-allay 3s ease-in-out infinite;
-        }
-
-        @keyframes float-allay {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-5px) rotate(2deg); }
-            75% { transform: translateY(5px) rotate(-2deg); }
-        }
-
-        .allay-wings {
-            animation: flutter 0.2s linear infinite;
-            transform-origin: center;
-        }
-
-        @keyframes flutter {
-            0%, 100% { transform: scaleX(1); }
-            50% { transform: scaleX(0.6); }
-        }
-
-        .allay-glow {
-            animation: glow-pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes glow-pulse {
-            0%, 100% { filter: drop-shadow(0 0 5px var(--allay-blue)); }
-            50% { filter: drop-shadow(0 0 15px var(--allay-light)); }
-        }
-
-        /* Music Notes from Allay */
-        .music-note {
-            position: fixed;
-            font-size: 16px;
-            color: var(--allay-light);
-            pointer-events: none;
-            z-index: 9998;
-            animation: float-note 3s ease-out forwards;
-            opacity: 0;
-        }
-
-        @keyframes float-note {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-50px) rotate(20deg); opacity: 0; }
         }
 
         /* Constellation Background Canvas */
@@ -170,13 +80,6 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 1rem;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            position: relative;
         }
 
         .logo {
@@ -235,130 +138,6 @@
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 1px;
-        }
-
-        /* Settings Button */
-        .settings-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: var(--bg-card);
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .settings-btn:hover {
-            background: var(--accent-gold);
-            color: #000;
-            border-color: var(--accent-gold);
-            transform: rotate(30deg);
-        }
-
-        .settings-btn svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        /* Settings Modal */
-        .settings-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .settings-modal.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .settings-content {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-        }
-
-        .settings-modal.active .settings-content {
-            transform: scale(1);
-        }
-
-        .settings-header {
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--bg-glass);
-        }
-
-        .settings-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--accent-gold);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .settings-body {
-            padding: 2rem;
-        }
-
-        .settings-section {
-            margin-bottom: 2rem;
-        }
-
-        .settings-section-title {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .login-log {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .log-entry {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.9rem;
-        }
-
-        .log-entry:last-child {
-            border-bottom: none;
         }
 
         /* Main Container */
@@ -1368,102 +1147,54 @@
                 right: 0.5rem;
                 padding: 0.25rem 0.5rem;
             }
-
-            .allay {
-                width: 30px;
-                height: 30px;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Ambient Lighting -->
-    <div class="ambient-light light-1"></div>
-    <div class="ambient-light light-2"></div>
-    <div class="ambient-light light-3"></div>
-
     <!-- Constellation Background -->
     <canvas id="constellation-canvas"></canvas>
 
-    <!-- Main App -->
-    <div id="mainApp">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <div class="logo-section" id="logoSection">
-                    <div>
-                        <div class="logo">AURA</div>
-                        <div class="subtitle">Private Inventory System</div>
-                    </div>
-                </div>
-                <div style="display: flex; align-items: center; gap: 1.5rem;">
-                    <div class="header-stats">
-                        <div class="stat">
-                            <div class="stat-value" id="totalItems">0</div>
-                            <div class="stat-label">Items</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value" id="totalStock">0</div>
-                            <div class="stat-label">Total Stock</div>
-                        </div>
-                    </div>
-                    <button class="settings-btn" onclick="openSettings()" title="Settings">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="3"></circle>
-                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                        </svg>
-                    </button>
-                </div>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div>
+                <div class="logo">AURA</div>
+                <div class="subtitle">Private Inventory System</div>
             </div>
-        </header>
-
-        <!-- Main Container -->
-        <div class="container">
-            <!-- Action Bar -->
-            <div class="action-bar">
-                <div class="search-box">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" id="searchInput" placeholder="Search your inventory...">
+            <div class="header-stats">
+                <div class="stat">
+                    <div class="stat-value" id="totalItems">0</div>
+                    <div class="stat-label">Items</div>
                 </div>
-                <div style="display: flex; gap: 1rem;">
-                    <button class="btn btn-secondary" onclick="exportData()">📥 Export</button>
-                    <label class="btn btn-secondary" style="cursor: pointer;">
-                        📤 Import
-                        <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importData(this)">
-                    </label>
-                    <button class="btn btn-primary" onclick="openModal()">+ Add Item</button>
+                <div class="stat">
+                    <div class="stat-value" id="totalStock">0</div>
+                    <div class="stat-label">Total Stock</div>
                 </div>
-            </div>
-
-            <!-- Inventory Grid -->
-            <div id="inventoryGrid" class="inventory-grid">
-                <!-- Items will be rendered here -->
             </div>
         </div>
-    </div>
+    </header>
 
-    <!-- Settings Modal -->
-    <div id="settingsModal" class="settings-modal" onclick="closeSettings(event)">
-        <div class="settings-content" onclick="event.stopPropagation()">
-            <div class="settings-header">
-                <div class="settings-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                    </svg>
-                    Vault Settings
-                </div>
-                <button class="modal-close" onclick="closeSettings()">&times;</button>
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search your inventory...">
             </div>
-            <div class="settings-body">
-                <!-- Clear Data -->
-                <div class="settings-section">
-                    <div class="settings-section-title">Danger Zone</div>
-                    <button class="btn btn-danger" onclick="clearAllData()" style="width: 100%;">
-                        🗑️ Clear All Data
-                    </button>
-                </div>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-secondary" onclick="exportData()">📥 Export</button>
+                <label class="btn btn-secondary" style="cursor: pointer;">
+                    📤 Import
+                    <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importData(this)">
+                </label>
+                <button class="btn btn-primary" onclick="openModal()">+ Add Item</button>
             </div>
+        </div>
+
+        <!-- Inventory Grid -->
+        <div id="inventoryGrid" class="inventory-grid">
+            <!-- Items will be rendered here -->
         </div>
     </div>
 
@@ -1554,131 +1285,9 @@
     <div id="toast" class="toast"></div>
 
     <script>
-        // Create Allay Companions
-        function createAllays() {
-            const allaySVG = `
-                <svg class="allay-body allay-glow" viewBox="0 0 100 100" fill="none">
-                    <!-- Wings -->
-                    <g class="allay-wings">
-                        <path d="M20 50 Q5 30 15 15 Q25 5 35 20 Q30 35 20 50" fill="#80e5ff" opacity="0.8"/>
-                        <path d="M80 50 Q95 30 85 15 Q75 5 65 20 Q70 35 80 50" fill="#80e5ff" opacity="0.8"/>
-                    </g>
-                    <!-- Body -->
-                    <rect x="30" y="25" width="40" height="50" rx="20" fill="#00d4ff"/>
-                    <!-- Face -->
-                    <ellipse cx="40" cy="45" rx="5" ry="8" fill="white"/>
-                    <ellipse cx="60" cy="45" rx="5" ry="8" fill="white"/>
-                    <!-- Smile -->
-                    <path d="M42 60 Q50 68 58 60" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    <!-- Arms -->
-                    <ellipse cx="25" cy="55" rx="8" ry="15" fill="#00d4ff" transform="rotate(-20 25 55)"/>
-                    <ellipse cx="75" cy="55" rx="8" ry="15" fill="#00d4ff" transform="rotate(20 75 55)"/>
-                </svg>
-            `;
-
-            // Create 3 Allays with different behaviors
-            for (let i = 0; i < 3; i++) {
-                const allay = document.createElement('div');
-                allay.className = 'allay';
-                allay.id = `allay-${i}`;
-                allay.innerHTML = allaySVG;
-                allay.style.left = Math.random() * (window.innerWidth - 50) + 'px';
-                allay.style.top = Math.random() * (window.innerHeight - 50) + 'px';
-                document.body.appendChild(allay);
-                
-                // Different behavior for each Allay
-                animateAllay(allay, i);
-            }
-        }
-
-        function animateAllay(allay, index) {
-            let x = parseFloat(allay.style.left);
-            let y = parseFloat(allay.style.top);
-            let targetX = x;
-            let targetY = y;
-            let speed = 0.5 + (index * 0.3);
-            let mode = 'wander'; // 'wander', 'follow', 'dance'
-            
-            setInterval(() => {
-                const logo = document.getElementById('logoSection');
-                const logoRect = logo ? logo.getBoundingClientRect() : null;
-                
-                // Randomly change behavior
-                if (Math.random() < 0.01) {
-                    const modes = ['wander', 'follow', 'dance'];
-                    mode = modes[Math.floor(Math.random() * modes.length)];
-                }
-                
-                if (mode === 'dance' && logoRect) {
-                    // Dance around logo
-                    const angle = Date.now() / 1000 + (index * 2);
-                    targetX = logoRect.left + logoRect.width/2 + Math.cos(angle) * 100 - 20;
-                    targetY = logoRect.top + Math.sin(angle) * 60 - 20;
-                } else if (mode === 'follow') {
-                    // Follow mouse loosely
-                    targetX = mouseX + (index * 30) - 50;
-                    targetY = mouseY + (index * 20) - 50;
-                } else {
-                    // Wander randomly
-                    if (Math.random() < 0.02 || Math.abs(x - targetX) < 10) {
-                        targetX = Math.random() * (window.innerWidth - 50);
-                        targetY = Math.random() * (window.innerHeight - 50);
-                    }
-                }
-                
-                // Smooth movement
-                x += (targetX - x) * 0.02 * speed;
-                y += (targetY - y) * 0.02 * speed;
-                
-                // Keep in bounds
-                x = Math.max(0, Math.min(window.innerWidth - 50, x));
-                y = Math.max(0, Math.min(window.innerHeight - 50, y));
-                
-                allay.style.left = x + 'px';
-                allay.style.top = y + 'px';
-                
-                // Face direction
-                const facing = targetX > x ? 1 : -1;
-                allay.style.transform = `scaleX(${facing})`;
-                
-            }, 50);
-            
-            // Spawn music notes occasionally
-            setInterval(() => {
-                if (Math.random() < 0.3) {
-                    spawnMusicNote(x + 20, y);
-                }
-            }, 2000 + (index * 500));
-        }
-
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-
-        function spawnMusicNote(x, y) {
-            const notes = ['♪', '♫', '♬', '♩'];
-            const note = document.createElement('div');
-            note.className = 'music-note';
-            note.textContent = notes[Math.floor(Math.random() * notes.length)];
-            note.style.left = x + 'px';
-            note.style.top = y + 'px';
-            document.body.appendChild(note);
-            
-            setTimeout(() => note.remove(), 3000);
-        }
-
-        // Initialize Allays when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            createAllays();
-        });
-
         // Constellation Background Animation
-        function initConstellation() {
-            var width, height, canvas, ctx, points, target;
+        (function() {
+            var width, height, canvas, ctx, points, target, animateHeader = true;
             var pointCount = 60;
             var connectionDistance = 150;
             var mouseDistance = 250;
@@ -1692,6 +1301,7 @@
                 canvas.width = width;
                 canvas.height = height;
 
+                // Create points
                 points = [];
                 for (var i = 0; i < pointCount; i++) {
                     var x = Math.random() * width;
@@ -1730,27 +1340,33 @@
                 for (var i = 0; i < points.length; i++) {
                     var p = points[i];
 
+                    // Move point
                     p.x += p.vx;
                     p.y += p.vy;
 
+                    // Bounce off edges
                     if (p.x < 0 || p.x > width) p.vx *= -1;
                     if (p.y < 0 || p.y > height) p.vy *= -1;
 
+                    // Calculate distance to mouse
                     var dx = target.x - p.x;
                     var dy = target.y - p.y;
                     var dist = Math.sqrt(dx * dx + dy * dy);
 
+                    // Activate based on mouse proximity
                     if (dist < mouseDistance) {
                         p.active = 1 - (dist / mouseDistance);
                     } else {
                         p.active *= 0.95;
                     }
 
+                    // Draw point
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, 2 + p.active * 2, 0, Math.PI * 2);
                     ctx.fillStyle = 'rgba(212, 175, 55, ' + (0.3 + p.active * 0.7) + ')';
                     ctx.fill();
 
+                    // Draw connections
                     for (var j = i + 1; j < points.length; j++) {
                         var p2 = points[j];
                         var dx2 = p2.x - p.x;
@@ -1768,6 +1384,7 @@
                         }
                     }
 
+                    // Connect to mouse if close
                     if (dist < mouseDistance) {
                         ctx.beginPath();
                         ctx.moveTo(p.x, p.y);
@@ -1782,10 +1399,7 @@
             }
 
             init();
-        }
-
-        // Initialize constellation
-        initConstellation();
+        })();
 
         // Data Management
         let inventory = [];
@@ -1845,26 +1459,6 @@
             input.value = val;
         }
 
-        // Settings Functions
-        function openSettings() {
-            document.getElementById('settingsModal').classList.add('active');
-        }
-
-        function closeSettings(event) {
-            if (event && event.target !== event.currentTarget) return;
-            document.getElementById('settingsModal').classList.remove('active');
-        }
-
-        function clearAllData() {
-            if (confirm('⚠️ WARNING: This will delete ALL your inventory data. This cannot be undone. Are you sure?')) {
-                localStorage.clear();
-                showToast('All data cleared. Reloading...', 'success');
-                setTimeout(() => {
-                    location.reload();
-                }, 2000);
-            }
-        }
-
         // Modal Functions
         function openModal(itemId = null) {
             const modal = document.getElementById('itemModal');
@@ -1875,9 +1469,11 @@
             currentMainImage = null;
             currentQCImages = [null, null, null, null, null, null];
             
+            // Reset main image
             document.getElementById('imageUpload').classList.remove('has-image');
             document.getElementById('imagePreview').src = '';
             
+            // Reset QC grid
             initQCGrid();
             
             if (itemId) {
@@ -1891,12 +1487,14 @@
                     document.getElementById('itemQC').value = item.qcNotes || '';
                     document.getElementById('itemLink').value = item.link || '';
                     
+                    // Load main image
                     if (item.image) {
                         currentMainImage = item.image;
                         document.getElementById('imagePreview').src = item.image;
                         document.getElementById('imageUpload').classList.add('has-image');
                     }
                     
+                    // Load QC images
                     if (item.qcImages) {
                         item.qcImages.forEach((img, idx) => {
                             if (img) {
@@ -1979,6 +1577,7 @@
                 return;
             }
 
+            // Filter out null QC images
             const validQCImages = currentQCImages.filter(img => img !== null);
 
             const itemData = {
@@ -2030,6 +1629,7 @@
             renderInventory();
             updateStats();
             
+            // Visual feedback
             showToast(`Stock updated: ${item.stock}`, 'success');
         }
 
@@ -2081,6 +1681,7 @@
                             </div>`
                         }
                         
+                        <!-- Stock Badge with Quick Controls -->
                         <div class="stock-badge">
                             <div>
                                 <div class="stock-badge-label">Stock</div>
@@ -2162,10 +1763,12 @@
 
             lightboxImages = [];
             
+            // Add main image if exists
             if (item.image) {
                 lightboxImages.push({ src: item.image, type: 'main' });
             }
             
+            // Add QC images
             if (item.qcImages) {
                 item.qcImages.forEach(img => {
                     lightboxImages.push({ src: img, type: 'qc' });
@@ -2174,8 +1777,9 @@
 
             if (lightboxImages.length === 0) return;
 
+            // Determine starting index
             if (qcIndex === -1) {
-                currentLightboxIndex = 0;
+                currentLightboxIndex = 0; // Main image
             } else {
                 currentLightboxIndex = item.image ? qcIndex + 1 : qcIndex;
             }
@@ -2192,6 +1796,7 @@
             img.src = lightboxImages[currentLightboxIndex].src;
             counter.textContent = `${currentLightboxIndex + 1} / ${lightboxImages.length}`;
             
+            // Update nav buttons visibility
             const prev = document.querySelector('.lightbox-prev');
             const next = document.querySelector('.lightbox-next');
             prev.style.display = lightboxImages.length > 1 ? 'flex' : 'none';
@@ -2218,7 +1823,7 @@
         }
 
         // Search
-        document.getElementById('searchInput')?.addEventListener('input', (e) => {
+        document.getElementById('searchInput').addEventListener('input', (e) => {
             renderInventory(e.target.value);
         });
 
@@ -2295,7 +1900,7 @@
         }
 
         // Close modal on outside click
-        document.getElementById('itemModal')?.addEventListener('click', (e) => {
+        document.getElementById('itemModal').addEventListener('click', (e) => {
             if (e.target.id === 'itemModal') closeModal();
         });
 
@@ -2304,33 +1909,18 @@
             if (e.key === 'Escape') {
                 closeModal();
                 closeLightbox();
-                closeSettings();
             }
-            if (e.key === 'ArrowLeft' && document.getElementById('lightbox')?.classList.contains('active')) {
+            if (e.key === 'ArrowLeft' && document.getElementById('lightbox').classList.contains('active')) {
                 changeImage(-1);
             }
-            if (e.key === 'ArrowRight' && document.getElementById('lightbox')?.classList.contains('active')) {
+            if (e.key === 'ArrowRight' && document.getElementById('lightbox').classList.contains('active')) {
                 changeImage(1);
             }
             if (e.ctrlKey && e.key === 'k') {
                 e.preventDefault();
-                document.getElementById('searchInput')?.focus();
+                document.getElementById('searchInput').focus();
             }
         });
-
-        // Service Worker for PWA
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('data:text/javascript;base64,' + btoa(`
-                self.addEventListener('install', e => {
-                    e.waitUntil(self.skipWaiting());
-                });
-                self.addEventListener('fetch', e => {
-                    e.respondWith(fetch(e.request).catch(() => {
-                        return new Response('Offline');
-                    }));
-                });
-            `)).catch(() => {});
-        }
     </script>
 </body>
 </html>
